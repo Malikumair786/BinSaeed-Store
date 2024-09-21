@@ -22,7 +22,7 @@ export class User {
   address: string;
 
   @Column()
-  passwordHash: string;
+  password: string;
 
   @Column({ default: false })
   isActive: boolean;
