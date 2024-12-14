@@ -1,0 +1,35 @@
+{
+  "name": "user-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "dotenv -e .env -- cross-env PORT=$NEXT_USER_APP_PORT next dev",
+    "build": "next build",
+    "start": "dotenv -e .env -- cross-env PORT=9091 next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "dotenv": "^16.4.7",
+    "lucide-react": "^0.468.0",
+    "next": "15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^2.5.5",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^7.4.4",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
