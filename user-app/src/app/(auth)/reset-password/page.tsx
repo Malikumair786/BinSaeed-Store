@@ -110,6 +110,7 @@ const ResetPassword = () => {
       <Card className="w-full mx-5 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
         <CardHeader className="flex flex-col items-center justify-center text-center">
           <Image
+            priority
             src={BinSaeedLogo}
             alt="Google"
             className="w-28 h-full object-cover"

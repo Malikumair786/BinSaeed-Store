@@ -36,6 +36,7 @@ const SocialAuthButtons = () => {
           onClick={handleLoginWithGoogle}
         >
           <Image
+            priority
             src={GoogleIcon}
             alt="Google"
             width={64}
@@ -48,6 +49,7 @@ const SocialAuthButtons = () => {
           onClick={handleLoginWithFacebook}
         >
           <Image
+            priority
             src={FacebookIcon}
             alt="Facebook"
             width={64}

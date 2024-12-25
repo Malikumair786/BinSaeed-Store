@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { MapPinHouse } from "lucide-react";
 
 import { useSignupMutation } from "@/services/authApi";
 import { useToast } from "@/hooks/use-toast";
@@ -33,6 +34,8 @@ const Signup = () => {
   const [signup, { isLoading, error }] = useSignupMutation();
   const [userData, setUserData] = useState({
     username: "",
+    phoneNo: "",
+    address: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -45,6 +48,10 @@ const Signup = () => {
       ...prev,
       [id]: value,
     }));
+  };
+
+  const handlePickAddress = () => {
+    console.log("Opening map to pick location...");
   };
 
   const validatePassword = (
@@ -97,6 +104,7 @@ const Signup = () => {
       <Card className="w-full mx-5 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
         <CardHeader className="flex flex-col items-center justify-center text-center">
           <Image
+            priority
             src={BinSaeedLogo}
             alt="Google"
             className="w-28 h-full object-cover"
@@ -111,13 +119,63 @@ const Signup = () => {
               </Label>
               <Input
                 id="username"
-                name="username"
+                name="name"
+                type="name"
                 value={userData.username}
                 onChange={handleInputChange}
                 placeholder="John Doe"
                 required
               />
             </div>
+            <div className="grid gap-2">
+              <Label
+                id="phoneNo"
+                htmlFor="phoneNo"
+                className="text-sm font-medium text-gray-700"
+              >
+                Phone Number
+              </Label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground text-sm">
+                  +92
+                </span>
+                <Input
+                  id="phoneNo"
+                  name="phoneNo"
+                  type="tel"
+                  value={userData.phoneNo}
+                  onChange={handleInputChange}
+                  placeholder="300-0000000"
+                  required
+                  className="pl-12"
+                />
+              </div>
+            </div>
+
+            <div className="grid gap-2">
+              <Label id="address" htmlFor="address">
+                Address
+              </Label>
+              <div className="relative">
+                <Input
+                  id="address"
+                  name="address"
+                  type="address"
+                  value={userData.address}
+                  onChange={handleInputChange}
+                  placeholder="House # 1, satellite town, Islamabad"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={handlePickAddress}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground text-lg"
+                >
+                  <MapPinHouse className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -155,7 +213,7 @@ const Signup = () => {
           </form>
           <div className="text-center text-md mt-4">
             Already have an account?{" "}
-            <Link href="/" className="underline">
+            <Link href="/login" className="underline">
               Sign in
             </Link>
           </div>

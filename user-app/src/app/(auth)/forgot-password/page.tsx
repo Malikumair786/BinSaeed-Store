@@ -52,6 +52,7 @@ const ForgotPassword = () => {
       <Card className="w-full mx-5 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
         <CardHeader className="flex flex-col items-center justify-center text-center">
           <Image
+            priority
             src={BinSaeedLogo}
             alt="Google"
             className="w-28 h-full object-cover"
@@ -80,7 +81,7 @@ const ForgotPassword = () => {
           </form>
           <div className="mt-4 text-center text-md">
             Remember your password?{" "}
-            <Link href="/" className="underline">
+            <Link href="/login" className="underline">
               Go back to login
             </Link>
           </div>
