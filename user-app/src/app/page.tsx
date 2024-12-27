@@ -1,26 +1,3 @@
-<<<<<<< Updated upstream
-import Link from "next/link";
-import React from "react";
-
-const App = () => {
-  return (
-    <>
-      <div>
-        <Link href="/signup" className="underline">
-          Sign up
-        </Link>
-      </div>
-      <div>
-        <Link href="/login" className="underline">
-          Login
-        </Link>
-      </div>
-    </>
-  );
-};
-
-export default App;
-=======
 "use client";
 import React, { useEffect, useState } from "react";
 import FloatingNav from "@/components/ui/floating-navbar";
@@ -187,4 +164,3 @@ export default function App() {
     </div>
   );
 }
->>>>>>> Stashed changes
