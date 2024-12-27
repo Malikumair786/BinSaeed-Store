@@ -59,7 +59,7 @@ const Login = () => {
           <Image
             priority
             src={BinSaeedLogo}
-            alt="Google"
+            alt="App logo"
             className="w-28 h-full object-cover"
           />
           <CardTitle>Welcome to Bin Saeed</CardTitle>
