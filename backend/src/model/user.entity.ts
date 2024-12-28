@@ -1,57 +1,63 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from 'typeorm';
 import { UserType } from 'src/common/user-type.enum';
+import { IsNotEmpty } from 'class-validator';
+import { LoggedInWith } from 'src/common/logged-in-with.enum';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  firstName: string;
+  @Column({ length: 50 })
+  @IsNotEmpty()
+  userName: string;
 
   @Column()
-  lastName: string;
-
-  @Column({ unique: true })
-  email: string;
-
-  @Column()
-  phone: string;
+  phoneNumber: string;
 
   @Column()
   address: string;
 
+  @Column({ unique: true })
+  email: string;
+
+  @Column({ default: false })
+  isVerified: boolean;
+
   @Column()
   password: string;
 
-  @Column({ default: false })
-  isActive: boolean;
-
-  @Column({ default: false })
-  isAuthenticated: boolean; // Email verified status, default: false
+  @Column({
+    type: 'enum',
+    enum: UserType,
+    default: UserType.USER,
+  })
+  role: UserType;
 
   @Column({
     type: 'enum',
-    enum: UserType, // Using the enum
-    default: UserType.USER, // Default is User
+    enum: LoggedInWith,
+    default: LoggedInWith.EMAIL,
+    nullable: true,
   })
-  role: UserType;
+  loggedInWith?: LoggedInWith;
+
+  @Column({ nullable: true })
+  apiKey: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column({ nullable: true })
-  createdBy: string;
-
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({ nullable: true })
-  updatedBy: string;
-
   @DeleteDateColumn()
   deletedAt: Date;
-
-  @Column({ nullable: true })
-  deletedBy: string;
 }

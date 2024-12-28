@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {  getDataSourceOptions } from 'db/data-source';
+import { getDataSourceOptions } from 'db/data-source';
 import { UserModule } from './module/user.module';
-import { GoogleAuthModule } from './google-auth/google-auth.module';
+import { LinkModule } from './module/link.module';
+import { MailerModule } from './module/mailer.module';
+import { AuthModule } from './module/auth.module';
 
 @Module({
   imports: [
@@ -12,7 +14,9 @@ import { GoogleAuthModule } from './google-auth/google-auth.module';
     }),
     TypeOrmModule.forRoot(getDataSourceOptions()),
     UserModule,
-    GoogleAuthModule 
+    LinkModule,
+    MailerModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
