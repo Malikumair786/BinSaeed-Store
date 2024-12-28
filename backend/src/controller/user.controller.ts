@@ -18,6 +18,7 @@ import { User } from 'src/model/user.entity';
 import { LinkService } from 'src/service/link.service';
 import { MailerService } from 'src/service/mailer.service';
 import { UserService } from 'src/service/user.service';
+import { SkipAuth } from 'src/guard/skipAuth.guard';
 
 @Controller('user')
 export class UserController {
@@ -31,6 +32,7 @@ export class UserController {
 
   private logger = new Logger(UserController.name);
 
+  @SkipAuth()
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
     try {
@@ -97,7 +99,7 @@ export class UserController {
       );
       const mailDto: SendEmailDto = {
         recipient: {
-          name: user.userName,
+          name: user.username,
           address: user.email,
         },
         subject: 'Bin Saeed Bakers: Account Verification',

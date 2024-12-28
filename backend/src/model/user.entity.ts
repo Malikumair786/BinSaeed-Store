@@ -17,10 +17,10 @@ export class User {
 
   @Column({ length: 50 })
   @IsNotEmpty()
-  userName: string;
+  username: string;
 
   @Column()
-  phoneNumber: string;
+  phoneNo: string;
 
   @Column()
   address: string;

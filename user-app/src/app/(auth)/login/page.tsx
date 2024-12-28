@@ -35,7 +35,7 @@ const Login = () => {
         const textEncoded = encodeURIComponent(
           "Please check your inbox to verify your email first"
         );
-        router.push(`/verify-email?email=${emailEncoded}&text=${textEncoded}`);
+        router.push(`/verification?email=${emailEncoded}&text=${textEncoded}`);
         return;
       }
 

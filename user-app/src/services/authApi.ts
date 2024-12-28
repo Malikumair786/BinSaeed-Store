@@ -24,7 +24,17 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     signup: builder.mutation<ApiResponse, RegisterRequest>({
       query: (userData) => ({
-        url: "auth/sign-up",
+        url: "user",
+        method: "POST",
+        body: userData,
+      }),
+    }),
+    signupInfo: builder.mutation<
+      ApiResponse,
+      { userId: string; phoneNo: string; address: string }
+    >({
+      query: (userData) => ({
+        url: `auth/update-user-info/${userData.userId}`,
         method: "POST",
         body: userData,
       }),
@@ -55,6 +65,16 @@ export const authApi = apiSlice.injectEndpoints({
         body: { password, token, key },
       }),
     }),
+    verifyAccountEmail: builder.mutation<
+      ApiResponse,
+      { token: string; key: string }
+    >({
+      query: ({ token, key }) => ({
+        url: `/auth/verify`,
+        method: "POST",
+        body: { token, key },
+      }),
+    }),
   }),
 });
 
@@ -64,4 +84,6 @@ export const {
   useForgotPasswordMutation,
   useValidateResetPasswordLinkMutation,
   useResetPasswordMutation,
+  useSignupInfoMutation,
+  useVerifyAccountEmailMutation,
 } = authApi;

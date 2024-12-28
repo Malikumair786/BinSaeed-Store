@@ -42,7 +42,7 @@ async function bootstrap() {
     optionsSuccessStatus: 204,
     credentials: true,
     allowedHeaders:
-      'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe, Authorization, Timezone, Refresh',
+      'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe, Authorization, Timezone',
   };
 
   app.useGlobalPipes(new ValidationPipe());

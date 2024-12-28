@@ -58,7 +58,7 @@ export class AuthController {
 
   @SkipAuth()
   @UseGuards(LocalAuthGuard)
-  @Get('login')
+  @Post('login')
   async login(@Req() req, @Res() res: Response) {
     try {
       this.logger.log(`Logging in user with email: ${req.user.email}`);
@@ -250,7 +250,7 @@ export class AuthController {
       );
       const mailDto: SendEmailDto = {
         recipient: {
-          name: user.userName,
+          name: user.username,
           address: user.email,
         },
         subject: 'Bin Saeed Store: Reset Your Password',
@@ -563,8 +563,8 @@ export class AuthController {
       const user = await this.userService.findOneByEmail(req.user.user.email);
       if (!user) {
         const signUpRequest: CreateUserDto = {
-          userName: `${req.user.user.firstName} ${req.user.user.lastName}`,
-          phoneNumber: null,
+          username: `${req.user.user.firstName} ${req.user.user.lastName}`,
+          phoneNo: null,
           address: null,
           email: req.user.user.email,
           password: null,
@@ -588,7 +588,7 @@ export class AuthController {
       }
 
       this.logger.log(`User exists, logging in: ${user.email}`);
-      if (user.phoneNumber == null || user.address == null) {
+      if (user.phoneNo == null || user.address == null) {
         res.cookie('userId', user.id, {
           secure: true,
           sameSite: 'lax',
@@ -620,8 +620,8 @@ export class AuthController {
       const user = await this.userService.findOneByEmail(req.user.email);
       if (!user) {
         const signUpRequest: CreateUserDto = {
-          userName: `${req.user.firstName} ${req.user.lastName}`,
-          phoneNumber: null,
+          username: `${req.user.firstName} ${req.user.lastName}`,
+          phoneNo: null,
           address: null,
           email: req.user.email,
           password: null,
@@ -645,7 +645,7 @@ export class AuthController {
       }
 
       this.logger.log(`User exists, logging in: ${user.email}`);
-      if (user.phoneNumber == null || user.address == null) {
+      if (user.phoneNo == null || user.address == null) {
         res.cookie('userId', user.id, {
           secure: true,
           sameSite: 'lax',
@@ -821,7 +821,7 @@ export class AuthController {
       );
       const mailDto: SendEmailDto = {
         recipient: {
-          name: user.userName,
+          name: user.username,
           address: user.email,
         },
         subject: 'Bin Saeed Store: Account Verification',

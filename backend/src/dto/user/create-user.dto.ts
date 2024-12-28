@@ -10,11 +10,11 @@ import { LoggedInWith } from 'src/common/logged-in-with.enum';
 export class CreateUserDto {
   @IsNotEmpty()
   @Length(3, 50)
-  userName: string;
+  username: string;
 
   @IsNotEmpty()
   @Length(10, 11)
-  phoneNumber: string;
+  phoneNo: string;
 
   @IsNotEmpty()
   address: string;
