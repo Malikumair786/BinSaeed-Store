@@ -15,7 +15,7 @@ async function bootstrap() {
   );
 
   const transport = new winston.transports.DailyRotateFile({
-    filename: 'logs/bin-saeed-%DATE%.log',
+    filename: 'logs/binSaeed-%DATE%.log',
     datePattern: 'YYYY-MM-DD',
     zippedArchive: true,
     maxSize: '20m',

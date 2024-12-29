@@ -4,8 +4,8 @@ import "./globals.css";
 import { ToastProvider } from "@/components/ToastProvider";
 
 export const metadata: Metadata = {
-  title: "BinSaeed Bakers",
-  description: "Bakery application",
+  title: "BinSaeed Store",
+  description: "Ecommerce Store application",
 };
 
 export default function RootLayout({

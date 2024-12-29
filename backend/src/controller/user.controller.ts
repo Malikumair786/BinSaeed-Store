@@ -102,7 +102,7 @@ export class UserController {
           name: user.username,
           address: user.email,
         },
-        subject: 'Bin Saeed Bakers: Account Verification',
+        subject: 'BinSaeed Store: Account Verification',
         text: `Here is the link to verify your email (valid for 30 minutes): ${link}`,
       };
       this.logger.log('Sending email with request: ' + JSON.stringify(mailDto));

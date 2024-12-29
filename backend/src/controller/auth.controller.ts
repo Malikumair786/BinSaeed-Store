@@ -253,7 +253,7 @@ export class AuthController {
           name: user.username,
           address: user.email,
         },
-        subject: 'Bin Saeed Store: Reset Your Password',
+        subject: 'BinSaeed Store: Reset Your Password',
         text: `Here is the link to reset your password (it is only valid for 30 minutes): ${link}`,
       };
 
@@ -824,7 +824,7 @@ export class AuthController {
           name: user.username,
           address: user.email,
         },
-        subject: 'Bin Saeed Store: Account Verification',
+        subject: 'BinSaeed Store: Account Verification',
         text: `Here is the link to verify your email (valid for 30 minutes): ${link}`,
       };
       this.logger.log('Sending email with request: ' + JSON.stringify(mailDto));

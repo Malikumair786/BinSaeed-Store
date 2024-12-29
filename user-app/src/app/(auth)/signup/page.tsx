@@ -109,7 +109,7 @@ const Signup = () => {
             alt="Google"
             className="w-28 h-full object-cover"
           />
-          <CardTitle>Welcome to Bin Saeed</CardTitle>
+          <CardTitle>Welcome to BinSaeed</CardTitle>
         </CardHeader>
         <CardContent className="px-3">
           <form onSubmit={handleRegisterUser} className="grid gap-4">

@@ -73,7 +73,7 @@ const SignupInfo = () => {
           <Image
             priority
             src={BinSaeedLogo}
-            alt="Bin Saeed Logo"
+            alt="BinSaeed Logo"
             className="w-28 h-full object-cover"
           />
           <CardDescription>
