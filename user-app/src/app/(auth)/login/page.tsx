@@ -39,9 +39,7 @@ const Login = () => {
         return;
       }
 
-      Cookies.set("access_token", response.data.access_token, {
-        expires: new Date(new Date().getTime() + 15 * 24 * 60 * 60 * 1000),
-      });
+      Cookies.set("access_token", response.data.access_token);
       router.replace("/dashboard");
     } catch (err: any) {
       toast({

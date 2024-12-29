@@ -18,10 +18,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 const ResetPassword = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { toast } = useToast();
   const [
     validateResetPasswordLink,
     { isLoading: validating, error: validationError },
@@ -80,6 +82,11 @@ const ResetPassword = () => {
           token: code,
           key,
         }).unwrap();
+        toast({
+          title: "Success",
+          description: "Password changed successfully",
+          variant: "default",
+        });
         router.replace("/login");
       } catch (error) {
         setErrorMessage("Failed to reset password. Please try again.");

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { MapPinHouse } from "lucide-react";
 
-import { useSignupMutation } from "@/services/authApi";
+import { useSignupMutation } from "@/services/userApi";
 import { useToast } from "@/hooks/use-toast";
 import { PasswordInput } from "@/components/PasswordInput";
 import Loader from "@/components/loader";

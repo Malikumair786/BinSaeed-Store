@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { MapPinHouse } from "lucide-react";
 
-import { useSignupInfoMutation } from "@/services/authApi";
+import { useSignupInfoMutation } from "@/services/userApi";
 import { useToast } from "@/hooks/use-toast";
 import Loader from "@/components/loader";
 import BinSaeedLogo from "../../../icons/Bin_Saeed_logo.png";
