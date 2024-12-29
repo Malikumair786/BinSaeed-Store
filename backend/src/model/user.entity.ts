@@ -7,7 +7,7 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 import { UserType } from 'src/common/user-type.enum';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { LoggedInWith } from 'src/common/logged-in-with.enum';
 
 @Entity('users')
@@ -19,11 +19,13 @@ export class User {
   @IsNotEmpty()
   username: string;
 
-  @Column()
-  phoneNo: string;
+  @Column({ nullable: true })
+  @IsOptional()
+  phoneNo?: string;
 
-  @Column()
-  address: string;
+  @Column({ nullable: true })
+  @IsOptional()
+  address?: string;
 
   @Column({ unique: true })
   email: string;
@@ -31,8 +33,9 @@ export class User {
   @Column({ default: false })
   isVerified: boolean;
 
-  @Column()
-  password: string;
+  @Column({ nullable: true })
+  @IsOptional()
+  password?: string;
 
   @Column({
     type: 'enum',

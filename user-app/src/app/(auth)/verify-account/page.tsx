@@ -22,11 +22,11 @@ const VerifyAccount = () => {
             Cookies.set("access_token", response.data.access_token);
             router.replace("/dashboard");
           } else {
-            console.error("Link is invalid");
+            console.log("Link is invalid");
           }
         })
         .catch((err: any) => {
-          console.error("Error verifying account", err);
+          console.log("Error verifying account", err);
         });
     }
   }, [code, key, verifyAccountEmail, router]);

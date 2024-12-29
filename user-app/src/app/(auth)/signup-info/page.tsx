@@ -50,14 +50,10 @@ const SignupInfo = () => {
     };
     try {
       const response = await signupInfo(payload).unwrap();
+      Cookies.set("access_token", response.data.access_token);
       Cookies.remove("userId");
-      const email = encodeURIComponent(response?.data?.email || "");
-      const text = encodeURIComponent(
-        "Please check your inbox to verify your email address."
-      );
-      router.replace(`/verification?email=${email}&text=${text}`);
+      router.push("/dashboard");
     } catch (err: any) {
-      console.log("Registration failed:", err);
       toast({
         title: "Error",
         description: err?.data?.message || "Unable to Signup",

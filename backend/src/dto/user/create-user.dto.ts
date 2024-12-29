@@ -12,22 +12,22 @@ export class CreateUserDto {
   @Length(3, 50)
   username: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @Length(10, 11)
-  phoneNo: string;
+  phoneNo?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   address: string;
 
   @IsNotEmpty()
   email: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsStrongPassword()
-  password: string;
+  password?: string;
 
-  @IsNotEmpty()
-  confirmPassword: string;
+  @IsOptional()
+  confirmPassword?: string;
 
   isVerified: boolean;
 

@@ -90,7 +90,6 @@ const Signup = () => {
       );
       router.replace(`/verification?email=${email}&text=${text}`);
     } catch (err: any) {
-      console.log("Registration failed:", err);
       toast({
         title: "Error",
         description: err?.data?.message || "Unable to Signup",

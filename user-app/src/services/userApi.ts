@@ -29,7 +29,7 @@ export const authApi = apiSlice.injectEndpoints({
     >({
       query: (userData) => ({
         url: `auth/update-user-info/${userData.userId}`,
-        method: "POST",
+        method: "PUT",
         body: userData,
       }),
     }),

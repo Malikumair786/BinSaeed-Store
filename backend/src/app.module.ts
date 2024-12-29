@@ -13,10 +13,10 @@ import { AuthModule } from './module/auth.module';
       isGlobal: true, // makes ConfigModule globally available
     }),
     TypeOrmModule.forRoot(getDataSourceOptions()),
+    AuthModule,
     UserModule,
     LinkModule,
     MailerModule,
-    AuthModule,
   ],
   controllers: [],
   providers: [],

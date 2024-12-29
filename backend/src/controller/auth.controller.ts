@@ -11,12 +11,9 @@ import {
   forwardRef,
   Inject,
   Body,
-  Query,
-  HttpException,
-  Patch,
   InternalServerErrorException,
-  Headers,
   UseFilters,
+  Put,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Response, Request } from 'express';
@@ -665,7 +662,7 @@ export class AuthController {
   }
 
   @SkipAuth()
-  @Patch('update-user-info/:userId')
+  @Put('update-user-info/:userId')
   async updateUser(
     @Req() req,
     @Param('userId') userId: number,
