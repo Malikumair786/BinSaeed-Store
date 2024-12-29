@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { MapPinHouse } from "lucide-react";
 
-import { useSignupMutation } from "@/services/authApi";
+import { useSignupMutation } from "@/services/userApi";
 import { useToast } from "@/hooks/use-toast";
 import { PasswordInput } from "@/components/PasswordInput";
 import Loader from "@/components/loader";
@@ -90,7 +90,6 @@ const Signup = () => {
       );
       router.replace(`/verification?email=${email}&text=${text}`);
     } catch (err: any) {
-      console.log("Registration failed:", err);
       toast({
         title: "Error",
         description: err?.data?.message || "Unable to Signup",
@@ -109,7 +108,7 @@ const Signup = () => {
             alt="Google"
             className="w-28 h-full object-cover"
           />
-          <CardTitle>Welcome to Bin Saeed</CardTitle>
+          <CardTitle>Welcome to BinSaeed</CardTitle>
         </CardHeader>
         <CardContent className="px-3">
           <form onSubmit={handleRegisterUser} className="grid gap-4">

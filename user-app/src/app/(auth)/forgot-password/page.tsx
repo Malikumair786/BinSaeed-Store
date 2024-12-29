@@ -37,7 +37,6 @@ const ForgotPassword = () => {
       );
       router.push(`/verification?email=${encodedEmail}&text=${text}`);
     } catch (err: any) {
-      console.log("Error sending reset link:", err);
       toast({
         title: "Error",
         description:

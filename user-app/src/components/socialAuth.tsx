@@ -10,7 +10,7 @@ const SocialAuthButtons = () => {
       const googleAuthUrl = `${process.env.NEXT_PUBLIC_APP_API_URL}/auth/google`;
       window.location.href = googleAuthUrl;
     } catch (error) {
-      console.error("Google login error:", error);
+      console.log("Google login error:", error);
     }
   };
 
@@ -19,7 +19,7 @@ const SocialAuthButtons = () => {
       const facebookAuthUrl = `${process.env.NEXT_PUBLIC_APP_API_URL}/auth/facebook`;
       window.location.href = facebookAuthUrl;
     } catch (error) {
-      console.error("Facebook login error:", error);
+      console.log("Facebook login error:", error);
     }
   };
 
