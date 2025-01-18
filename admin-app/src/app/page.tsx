@@ -4,11 +4,10 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-import BinSaeedLogo from "../../../icons/Bin_Saeed_logo.png";
+import BinSaeedLogo from "../icons/Bin_Saeed_logo.png";
 import { useLoginMutation } from "@/services/authApi";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import SocialAuthButtons from "@/components/socialAuth";
 import { PasswordInput } from "@/components/PasswordInput";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -29,22 +28,12 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await login({ email, password }).unwrap();
-
-      if (response.status === "0103") {
-        const emailEncoded = encodeURIComponent(email);
-        const textEncoded = encodeURIComponent(
-          "Please check your inbox to verify your email first"
-        );
-        router.push(`/verification?email=${emailEncoded}&text=${textEncoded}`);
-        return;
-      }
-
-      Cookies.set("access_token", response.data.access_token);
+      Cookies.set("access_token_admin", response.data.access_token);
       router.replace("/dashboard");
     } catch (err: any) {
       toast({
         title: "Error",
-        description: "Incorrect email or password",
+        description: err?.data?.message || "Unable to login",
         variant: "destructive",
       });
     }
@@ -60,7 +49,7 @@ const Login = () => {
             alt="App logo"
             className="w-28 h-full object-cover"
           />
-          <CardTitle>Welcome to BinSaeed</CardTitle>
+          <CardTitle>Welcome to BinSaeed - Admin</CardTitle>
         </CardHeader>
         <CardContent className="px-3">
           <form onSubmit={handleLogin} className="grid gap-4">
@@ -91,13 +80,6 @@ const Login = () => {
             <Button type="submit" disabled={isLoading}>
               {isLoading ? <Loader /> : "Login"}
             </Button>
-            <SocialAuthButtons />
-            <div className="text-center text-md">
-              Don&apos;t have an account?{" "}
-              <Link href="/signup" className="underline">
-                Sign up
-              </Link>
-            </div>
           </form>
         </CardContent>
       </Card>
