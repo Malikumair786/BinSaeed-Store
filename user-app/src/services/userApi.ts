@@ -14,11 +14,17 @@ interface RegisterRequest {
   confirmPassword: string;
 }
 
+interface ChangePasswordRequest {
+  oldPassword: string;
+  newPassword: string;
+  newPasswordConfirmation: string;
+}
+
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     signup: builder.mutation<ApiResponse, RegisterRequest>({
       query: (userData) => ({
-        url: "user",
+        url: "users",
         method: "POST",
         body: userData,
       }),
@@ -33,7 +39,32 @@ export const authApi = apiSlice.injectEndpoints({
         body: userData,
       }),
     }),
+    me: builder.query<ApiResponse, void>({
+      query: () => ({
+        url: "users/me",
+        method: "GET",
+      }),
+    }),
+    changePassword: builder.mutation<ApiResponse, ChangePasswordRequest>({
+      query: (passwordData) => ({
+        url: "users/change-password",
+        method: "PATCH",
+        body: passwordData,
+      }),
+    }),
+    checkRegistrationStatus: builder.query<any, void>({
+      query: () => ({
+        url: `/auth/registration-status`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useSignupMutation, useSignupInfoMutation } = authApi;
+export const {
+  useSignupMutation,
+  useSignupInfoMutation,
+  useMeQuery,
+  useChangePasswordMutation,
+  useCheckRegistrationStatusQuery,
+} = authApi;

@@ -1,12 +1,11 @@
-import { MailerService } from '@nestjs-modules/mailer';
 import {
-  HttpStatus,
   Injectable,
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hashPassword } from 'src/common/password.util';
+import { ChangePasswordDto } from 'src/dto/user/change-password.dto';
 import { CreateUserDto } from 'src/dto/user/create-user.dto';
 import { UpdateUserDto } from 'src/dto/user/updateUser.dto';
 import { User } from 'src/model/user.entity';
@@ -119,6 +118,20 @@ export class UserService {
       return user;
     } catch (error) {
       this.logger.error(`Exception updating user info, ${error}`);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async changePassword(userId: number, changePasswordDto: ChangePasswordDto) {
+    try {
+      this.logger.log(`Updating password for user with id: ${userId}}`);
+      const newHashedPassword = await hashPassword(
+        changePasswordDto.newPassword,
+      );
+      await this.userRepository.update(userId, { password: newHashedPassword });
+      this.logger.log(`Successfully updated password`);
+    } catch (error) {
+      this.logger.error(`Exception updating password, ${error}`);
       throw new InternalServerErrorException();
     }
   }

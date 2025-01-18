@@ -1,14 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
 import BinSaeedLogo from "../../../icons/Bin_Saeed_logo.png";
-import {
-  useChangePasswordMutation,
-  useCheckRegistrationStatusQuery,
-} from "@/services/userApi";
+import { useChangePasswordMutation } from "@/services/userApi";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import Loader from "@/components/loader";
@@ -23,14 +20,7 @@ const ChangePassword = () => {
   const [isDataLoading, setIsDataLoading] = useState(false);
   const { toast } = useToast();
   const [changePassword] = useChangePasswordMutation();
-  const { data, isLoading } = useCheckRegistrationStatusQuery();
   const router = useRouter();
-
-  useEffect(() => {
-    if (data && data.status == "0109") {
-      setOldPassword("");
-    }
-  }, [data]);
 
   const validatePassword = (password: string) => {
     const passwordRegex =
@@ -41,21 +31,17 @@ const ChangePassword = () => {
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
-
     if (newPassword !== confirmPassword) {
       setErrorMessage("Passwords do not match.");
       return;
     }
-
     if (!validatePassword(newPassword)) {
       setErrorMessage(
         "Password must be at least 8 characters long, with one uppercase letter, one number, and one special character."
       );
       return;
     }
-
     setIsDataLoading(true);
-
     try {
       const response = await changePassword({
         oldPassword: oldPassword,
@@ -80,12 +66,6 @@ const ChangePassword = () => {
     }
   };
 
-  if (isLoading) {
-    <div className="flex items-center justify-center min-h-screen">
-      <Loader />
-    </div>;
-  }
-
   return (
     <div className="flex justify-center items-center py-2">
       <Card className="w-full mx-5 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
@@ -100,14 +80,12 @@ const ChangePassword = () => {
         </CardHeader>
         <CardContent className="px-3">
           <form onSubmit={handleChangePassword} className="grid gap-4">
-            {data?.status !== "0109" && (
-              <PasswordInput
-                id="oldPassword"
-                text="Old Password"
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
-              />
-            )}
+            <PasswordInput
+              id="oldPassword"
+              text="Old Password"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+            />
             <PasswordInput
               id="newPassword"
               text="New Password"

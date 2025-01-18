@@ -7,6 +7,10 @@ import {
   HttpStatus,
   Inject,
   forwardRef,
+  Patch,
+  Req,
+  UseGuards,
+  Get,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ApiResponse } from 'src/common/api-response';
@@ -19,8 +23,11 @@ import { LinkService } from 'src/service/link.service';
 import { MailerService } from 'src/service/mailer.service';
 import { UserService } from 'src/service/user.service';
 import { SkipAuth } from 'src/guard/skipAuth.guard';
+import { ChangePasswordDto } from 'src/dto/user/change-password.dto';
+import * as bcrypt from 'bcrypt';
+import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -91,6 +98,36 @@ export class UserController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  getProfile(@Req() req, @Res() res: Response) {
+    this.logger.log(`Fetching profile for user: ${req.user.email}`);
+    try {
+      return res
+        .status(HttpStatus.OK)
+        .json(
+          new ApiResponse(
+            true,
+            ResponseCodes.GENERIC_OK,
+            'User basic information',
+            req.user,
+          ),
+        );
+    } catch (error) {
+      this.logger.error(`Error fetching user basic information: ${error}`);
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json(
+          new ApiResponse(
+            false,
+            ResponseCodes.GENERIC_INTERNAL_SERVER_ERROR,
+            'Internal Server Error',
+            null,
+          ),
+        );
+    }
+  }
+
   private async sendVerificationEmail(user: User) {
     try {
       const link = await this.linkService.createLinkVerifyEmail(
@@ -113,6 +150,90 @@ export class UserController {
       this.logger.log('Result -> ' + JSON.stringify(result));
     } catch (error) {
       this.logger.error(`Error sending verification email: ${error}`);
+    }
+  }
+  @Patch('change-password')
+  async changePassword(
+    @Req() req,
+    @Body() changePasswordDto: ChangePasswordDto,
+    @Res() res: Response,
+  ) {
+    try {
+      const userId = req.user.userId;
+      this.logger.log(
+        `Password change request initiated for user with ID: ${userId}`,
+      );
+      const user = await this.userService.getUserById(userId);
+      if (!user) {
+        this.logger.log(`No user found with this id: ${userId}`);
+        return res
+          .status(HttpStatus.NOT_FOUND)
+          .json(
+            new ApiResponse(
+              false,
+              ResponseCodes.USER_NOT_FOUND,
+              'No user found for this id.',
+            ),
+          );
+      }
+
+      if (user.password) {
+        const isPasswordMatch = await bcrypt.compare(
+          changePasswordDto.oldPassword,
+          user.password,
+        );
+        if (!isPasswordMatch) {
+          this.logger.error(`Incorrect Old password for user: ${userId}`);
+          return res
+            .status(HttpStatus.NOT_FOUND)
+            .json(
+              new ApiResponse(
+                false,
+                ResponseCodes.USER_NOT_FOUND,
+                'Incorrect old password.',
+              ),
+            );
+        }
+      }
+
+      if (
+        changePasswordDto.newPassword !==
+        changePasswordDto.newPasswordConfirmation
+      ) {
+        this.logger.error(`Password confirmation mismatch for user: ${userId}`);
+        return res
+          .status(HttpStatus.NOT_FOUND)
+          .json(
+            new ApiResponse(
+              false,
+              ResponseCodes.USER_NOT_FOUND,
+              'New password and confirmation do not match',
+            ),
+          );
+      }
+      await this.userService.changePassword(userId, changePasswordDto);
+      this.logger.log(`Password changed successfully for user ID: ${userId}`);
+      return res
+        .status(HttpStatus.OK)
+        .json(
+          new ApiResponse(
+            true,
+            ResponseCodes.GENERIC_OK,
+            'Password changed successfully',
+          ),
+        );
+    } catch (error) {
+      this.logger.error(error);
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json(
+          new ApiResponse(
+            false,
+            ResponseCodes.GENERIC_INTERNAL_SERVER_ERROR,
+            'Internal Server Error',
+            null,
+          ),
+        );
     }
   }
 }
