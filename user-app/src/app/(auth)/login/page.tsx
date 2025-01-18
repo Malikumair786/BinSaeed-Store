@@ -44,7 +44,7 @@ const Login = () => {
     } catch (err: any) {
       toast({
         title: "Error",
-        description: err?.data?.message || "Unable to login",
+        description: "Incorrect email or password",
         variant: "destructive",
       });
     }
