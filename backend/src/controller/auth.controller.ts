@@ -216,13 +216,6 @@ export class AuthController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('me')
-  getProfile(@Req() req) {
-    this.logger.log(`Fetching profile for user: ${req.user.email}`);
-    return req.user;
-  }
-
   @SkipAuth()
   @Get('forgot-password/:email')
   async forgotPassword(@Param('email') email: string, @Res() res: Response) {
