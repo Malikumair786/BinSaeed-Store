@@ -4,6 +4,7 @@ import "./globals.css";
 import { ToastProvider } from "@/components/ToastProvider";
 
 export const metadata: Metadata = {
+  manifest: `${process.env.NEXT_PUBLIC_ASSET_URL}/manifest.json`,
   title: "BinSaeed Store",
   description: "Ecommerce Store application",
 };
