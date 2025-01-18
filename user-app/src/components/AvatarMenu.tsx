@@ -31,7 +31,7 @@ const AvatarMenu = () => {
 
   const handleSignOut = () => {
     Cookies.remove("access_token");
-    router.push("/login");
+    router.push("/");
   };
 
   if (error) {
@@ -59,12 +59,12 @@ const AvatarMenu = () => {
           className="text-md"
           onClick={() => router.push("/change-password")}
         >
-          <KeyRound className="mr-2 h-4 w-4" />
+          <KeyRound className="mr-2 h-4 w-4" color="hsl(var(--primary))" />
           Change Password
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-md" onClick={handleSignOut}>
-          <LogOut className="mr-2 h-4 w-4" />
+          <LogOut className="mr-2 h-4 w-4" color="hsl(var(--primary))" />
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>
