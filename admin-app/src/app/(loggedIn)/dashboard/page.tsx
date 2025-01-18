@@ -8,7 +8,7 @@ const Dashbooard = () => {
   const router = useRouter();
 
   const handleLogout = () => {
-    Cookies.remove("access_token");
+    Cookies.remove("access_token_admin");
     router.replace("/");
   };
   return (

@@ -6,7 +6,7 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.NEXT_PUBLIC_APP_API_URL}`,
     prepareHeaders: (headers) => {
-      const accessToken = Cookies.get("access_token");
+      const accessToken = Cookies.get("access_token_admin");
       headers.set("Authorization", `Bearer ${accessToken}`);
       return headers;
     },

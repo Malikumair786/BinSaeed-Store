@@ -19,7 +19,7 @@ const VerifyAccount = () => {
         .unwrap()
         .then((response) => {
           if (response.success) {
-            Cookies.set("access_token", response.data.access_token);
+            Cookies.set("access_token_admin", response.data.access_token);
             router.replace("/dashboard");
           } else {
             console.log("Link is invalid");
