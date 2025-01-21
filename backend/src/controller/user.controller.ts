@@ -17,7 +17,7 @@ import { ApiResponse } from 'src/common/api-response';
 import { LoggedInWith } from 'src/common/logged-in-with.enum';
 import { ResponseCodes } from 'src/common/response-codes.enum';
 import { CreateUserDto } from 'src/dto/user/create-user.dto';
-import { SendEmailDto } from 'src/dto/mail/send-mail';
+import { SendEmailDto } from 'src/dto/mail/send-mail.dto';
 import { User } from 'src/model/user.entity';
 import { LinkService } from 'src/service/link.service';
 import { MailerService } from 'src/service/mailer.service';
@@ -26,6 +26,7 @@ import { SkipAuth } from 'src/guard/skipAuth.guard';
 import { ChangePasswordDto } from 'src/dto/user/change-password.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('users')
 export class UserController {
@@ -99,6 +100,7 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
   @Get('me')
   getProfile(@Req() req, @Res() res: Response) {
     this.logger.log(`Fetching profile for user: ${req.user.email}`);
@@ -152,6 +154,8 @@ export class UserController {
       this.logger.error(`Error sending verification email: ${error}`);
     }
   }
+
+  @ApiBearerAuth('access-token')
   @Patch('change-password')
   async changePassword(
     @Req() req,
