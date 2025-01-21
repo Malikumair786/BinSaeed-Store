@@ -2,10 +2,10 @@ import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Link } from 'src/model/links.entity';
-import { CreateLink } from 'src/dto/links/create-link';
+import { CreateLink } from 'src/dto/links/create-link.dto';
 import { UserService } from './user.service';
 import { UserType } from 'src/common/user-type.enum';
-import { ValidateLink } from 'src/dto/links/validate-link';
+import { ValidateLink } from 'src/dto/links/validate-link.dto';
 
 @Injectable()
 export class LinkService {

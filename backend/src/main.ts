@@ -6,6 +6,7 @@ import 'winston-daily-rotate-file';
 import { ValidationPipe } from '@nestjs/common';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const logFormat = winston.format.printf(
@@ -34,6 +35,15 @@ async function bootstrap() {
     //   transports: [transport],
     // }),
   });
+
+  const config = new DocumentBuilder()
+    .addBearerAuth()
+    .setTitle('BinSaeed Ecommerce Store')
+    .setDescription('BinSaeed Ecommerce Store API documentation')
+    .setVersion('1.0.0')
+    .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, documentFactory);
 
   const corsOptions: CorsOptions = {
     origin: '*',

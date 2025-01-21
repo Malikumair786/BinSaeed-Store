@@ -17,7 +17,7 @@ import { ApiResponse } from 'src/common/api-response';
 import { LoggedInWith } from 'src/common/logged-in-with.enum';
 import { ResponseCodes } from 'src/common/response-codes.enum';
 import { CreateUserDto } from 'src/dto/user/create-user.dto';
-import { SendEmailDto } from 'src/dto/mail/send-mail';
+import { SendEmailDto } from 'src/dto/mail/send-mail.dto';
 import { User } from 'src/model/user.entity';
 import { LinkService } from 'src/service/link.service';
 import { MailerService } from 'src/service/mailer.service';
