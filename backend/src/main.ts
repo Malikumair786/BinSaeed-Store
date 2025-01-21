@@ -37,10 +37,13 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .addBearerAuth()
     .setTitle('BinSaeed Ecommerce Store')
     .setDescription('BinSaeed Ecommerce Store API documentation')
     .setVersion('1.0.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'access-token',
+    )
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);

@@ -37,6 +37,8 @@ import { UserService } from '../service/user.service';
 import { User } from '../model/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { UnauthorizedRedirectFilter } from 'src/filter/unauthorized-redirect.filter';
+import { SignInDto } from 'src/dto/auth/sign-in.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -56,10 +58,10 @@ export class AuthController {
   @SkipAuth()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Req() req, @Res() res: Response) {
+  async login(@Body() signInDto: SignInDto, @Res() res: Response) {
     try {
-      this.logger.log(`Logging in user with email: ${req.user.email}`);
-      const user = await this.userService.findOneByEmail(req.user.email);
+      this.logger.log(`Logging in user with email: ${signInDto.email}`);
+      const user = await this.userService.findOneByEmail(signInDto.email);
       if (user === null) {
         this.logger.error('No user found');
         return res
@@ -131,8 +133,8 @@ export class AuthController {
         }
       }
 
-      const response = await this.authService.login(req.user);
-      this.logger.log(`Login successful for: ${req.user.email}`);
+      const response = await this.authService.login(user);
+      this.logger.log(`Login successful for: ${signInDto.email}`);
       return res.status(HttpStatus.OK).json(
         new ApiResponse(
           true,
@@ -144,7 +146,7 @@ export class AuthController {
         ),
       );
     } catch (error) {
-      this.logger.error(`Login failed for: ${req.user.email}`, error.stack);
+      this.logger.error(`Login failed for: ${signInDto.email}`, error.stack);
       return res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json(
@@ -160,10 +162,10 @@ export class AuthController {
   @SkipAuth()
   @UseGuards(LocalAuthGuard)
   @Post('login-admin')
-  async loginAdmin(@Req() req, @Res() res: Response) {
-    this.logger.log(`Login request initiated for user: ${req.user.email}`);
+  async loginAdmin(@Body() signInDto: SignInDto, @Res() res: Response) {
+    this.logger.log(`Login request initiated for user: ${signInDto.email}`);
     try {
-      const user = await this.userService.findOneByEmail(req.user.email);
+      const user = await this.userService.findOneByEmail(signInDto.email);
       if (user === null) {
         this.logger.error('No user found');
         return res
@@ -190,8 +192,8 @@ export class AuthController {
           );
       }
 
-      const response = await this.authService.login(req.user);
-      this.logger.log(`Login successful for: ${req.user.email}`);
+      const response = await this.authService.login(user);
+      this.logger.log(`Login successful for: ${signInDto.email}`);
       return res.status(HttpStatus.OK).json(
         new ApiResponse(
           true,
@@ -203,7 +205,7 @@ export class AuthController {
         ),
       );
     } catch (error) {
-      this.logger.error(`Login failed for: ${req.user.email}`, error.stack);
+      this.logger.error(`Login failed for: ${signInDto.email}`, error.stack);
       return res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json(
@@ -709,6 +711,7 @@ export class AuthController {
     }
   }
 
+  @ApiBearerAuth('access-token')
   @Get('/registration-status')
   async checkRegistrationStatus(@Req() req, @Res() res: Response) {
     try {
