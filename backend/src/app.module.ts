@@ -6,6 +6,7 @@ import { UserModule } from './module/user.module';
 import { LinkModule } from './module/link.module';
 import { MailerModule } from './module/mailer.module';
 import { AuthModule } from './module/auth.module';
+import { CategoryModule } from './module/category.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AuthModule } from './module/auth.module';
     UserModule,
     LinkModule,
     MailerModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [],

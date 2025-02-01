@@ -80,7 +80,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <div className="flex justify-center item-center">
+            <div className="flex justify-end item-center">
               <Link
                 href="/forgot-password"
                 className="inline-block text-md underline"

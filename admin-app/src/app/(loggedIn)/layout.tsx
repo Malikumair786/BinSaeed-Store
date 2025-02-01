@@ -1,6 +1,11 @@
-"use client";
-
 import AvatarMenu from "@/components/AvatarMenu";
+import { AppSidebar } from "@/components/sidebar/app-sidebar";
+import { Separator } from "@/components/ui/separator";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 
 export default function DashboardLayout({
   children,
@@ -8,16 +13,22 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col md:flex-row min-h-screen w-full h-screen">
-      <div className="flex-grow w-auto">
-        <header className="flex justify-between h-14 items-center gap-4 border-b px-4 lg:h-[60px] lg:px-6">
-          <div></div>
-          <AvatarMenu />
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4 w-full">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2 h-4" />
+            <div className="ml-auto">
+              <AvatarMenu />
+            </div>
+          </div>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-2 lg:gap-6 lg:p-6">
           {children}
         </main>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
