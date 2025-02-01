@@ -1,27 +1,26 @@
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 import { Product } from './product.entity';
 
-@Entity('categories')
-export class Category {
+@Entity('product_images')
+export class ProductImage {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 255 })
-  title: string;
+  @ManyToOne(() => Product, (product) => product.id, {
+    onDelete: 'CASCADE',
+  })
+  product: Product;
 
-  @Column({ type: 'text' })
-  description: string;
-
-  @OneToMany(() => Product, (product) => product.category)
-  products: Product[];
+  @Column({ type: 'varchar', length: 255 })
+  image_url: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
