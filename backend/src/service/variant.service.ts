@@ -21,7 +21,7 @@ export class VariantService {
     try {
       this.logger.log(`Creating ${variants.length} variants for product ID: ${productId}`);
       const variantEntities = variants.map((variant) =>
-        this.variantRepository.create({variant_name: variant.name, price: variant.price, product: { id: productId },})
+        this.variantRepository.create({name: variant.name, price: variant.price, product: { id: productId },})
       );
       await this.variantRepository.save(variantEntities);
       this.logger.log(`Successfully created ${variants.length} variants for product ID: ${productId}`,);

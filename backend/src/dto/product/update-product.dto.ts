@@ -8,8 +8,6 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateProductVariantDto } from './create-product-variant.dto';
-import { CreateProductImageDto } from './create-product-image.dto';
-import { CreateProductTagDto } from './create-product-tag.dto';
 
 export class UpdateProductDto {
   @IsOptional()
@@ -29,14 +27,9 @@ export class UpdateProductDto {
   categoryId?: number;
 
   @IsOptional()
-  @IsUrl()
-  imageUrl?: string;
-
-  @IsOptional()
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateProductTagDto)
-  tags?: CreateProductTagDto[];
+  @IsString({ each: true })
+  tags?: string[];
 
   @IsOptional()
   @IsArray()
@@ -46,7 +39,6 @@ export class UpdateProductDto {
 
   @IsOptional()
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateProductImageDto)
-  images?: CreateProductImageDto[];
+  @IsString({ each: true })
+  images?: string[];
 }

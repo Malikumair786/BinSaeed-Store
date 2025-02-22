@@ -20,7 +20,7 @@ export class ProductVariant {
   product: Product;
 
   @Column({ type: 'varchar', length: 255 })
-  variant_name: string;
+  name: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   price: number;

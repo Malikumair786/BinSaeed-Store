@@ -9,8 +9,7 @@ import { AuthModule } from './module/auth.module';
 import { CategoryModule } from './module/category.module';
 import { ProductModule } from './module/product.module';
 import { VariantModule } from './module/variant.module';
-import { ImageModule } from './module/image.module';
-import { TagModule } from './module/tag.module';
+import { S3Module } from './module/s3Module.module';
 
 @Module({
   imports: [
@@ -25,8 +24,7 @@ import { TagModule } from './module/tag.module';
     CategoryModule,
     ProductModule,
     VariantModule,
-    ImageModule,
-    TagModule
+    S3Module
   ],
   controllers: [],
   providers: [],

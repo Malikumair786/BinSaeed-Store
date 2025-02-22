@@ -8,10 +8,8 @@ import { Repository } from 'typeorm';
 import { Product } from '../model/product.entity';
 import { CreateProductDto } from '../dto/product/create-product.dto';
 import { UpdateProductDto } from '../dto/product/update-product.dto';
-
-import { TagService } from './tag.service';
 import { VariantService } from './variant.service';
-import { ImageService } from './image.service';
+import { S3Service } from './S3Service.service';
 
 @Injectable()
 export class ProductService {
@@ -19,31 +17,39 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
-    private readonly tagService: TagService,
     private readonly variantService: VariantService,
-    private readonly imageService: ImageService,
+    private readonly s3Service: S3Service,
   ) {}
 
-  async createProduct(createProductDto: CreateProductDto): Promise<Product> {
+
+  async createProduct(createProductDto: CreateProductDto, files: Express.Multer.File[]): Promise<Product> {
     try {
       this.logger.log(`Creating product: ${createProductDto.name}`);
+      let uploadedImageUrls: string[] = [];
+      if (files && files.length > 0) {
+        uploadedImageUrls = await Promise.all(
+          files.map((file) => this.s3Service.uploadFile(file)),
+        );
+      }
+
+      createProductDto.images = uploadedImageUrls;
+
       const product = this.productRepository.create({
         name: createProductDto.name,
         description: createProductDto.description,
         price: createProductDto.price,
-        category: { id: createProductDto.categoryId }, // Assuming categoryId is passed in DTO
-        image_url: createProductDto.imageUrl,
+        image_url: uploadedImageUrls.length > 0 ? uploadedImageUrls[0] : null,
+        category: { id: createProductDto.categoryId },
+        tags: createProductDto.tags,
+        images: uploadedImageUrls,
       });
+      
       const savedProduct = await this.productRepository.save(product);
-      if (createProductDto.tags && createProductDto.tags.length) {
-        await this.tagService.createTags(savedProduct.id,createProductDto.tags);
-      }
+      this.logger.log(`Product created successfully with ID: ${savedProduct.id}`);
       if (createProductDto.variants && createProductDto.variants.length) {
         await this.variantService.createVariants(savedProduct.id,createProductDto.variants);
       }
-      if (createProductDto.images && createProductDto.images.length) {
-        await this.imageService.createImages(savedProduct.id,createProductDto.images);
-      }
+      this.logger.log(`Product creation completed successfully: ${savedProduct.name}`);
       return savedProduct;
     } catch (error) {
       this.logger.error(`Failed to create product: ${error.message}`);
@@ -60,14 +66,8 @@ export class ProductService {
       }
       Object.assign(product, updateProductDto);
       await this.productRepository.save(product);
-      if (updateProductDto.tags) {
-        await this.tagService.updateTags(id, updateProductDto.tags);
-      }
       if (updateProductDto.variants) {
         await this.variantService.updateVariants(id, updateProductDto.variants);
-      }
-      if (updateProductDto.images) {
-        await this.imageService.updateImages(id, updateProductDto.images);
       }
       return product;
     } catch (error) {
@@ -81,9 +81,7 @@ export class ProductService {
       this.logger.log(`Fetching product with ID: ${id}`);
       const product = await this.productRepository
         .createQueryBuilder('product')
-        .leftJoinAndSelect('product.tags', 'tags') // Join tags
         .leftJoinAndSelect('product.variants', 'variants') // Join variants
-        .leftJoinAndSelect('product.images', 'images') // Join images
         .where('product.id = :id', { id })
         .getOne();
 
@@ -104,9 +102,7 @@ export class ProductService {
       this.logger.log('Fetching all products');
       const products = await this.productRepository
         .createQueryBuilder('product')
-        .leftJoinAndSelect('product.tags', 'tags') // Join tags
         .leftJoinAndSelect('product.variants', 'variants') // Join variants
-        .leftJoinAndSelect('product.images', 'images') // Join images
         .getMany();
       this.logger.log(`Successfully fetched ${products.length} products`);
       return products;
@@ -119,9 +115,7 @@ export class ProductService {
   async deleteProduct(id: number): Promise<void> {
     try {
       this.logger.log(`Deleting product ID: ${id}`);
-      await this.tagService.deleteTagsByProduct(id);
       await this.variantService.deleteVariantsByProduct(id);
-      await this.imageService.deleteImagesByProduct(id);
       await this.productRepository.softDelete(id);
     } catch (error) {
       this.logger.error(`Failed to delete product: ${error.message}`);

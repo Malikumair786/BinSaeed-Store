@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, HttpStatus, Logger, Param, Post, Put, Res} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpStatus, Logger, Param, Post, Put, Res, UploadedFiles, UseInterceptors} from '@nestjs/common';
 import { Response } from 'express';
 import { ProductService } from '../service/product.service';
 import { CreateProductDto } from 'src/dto/product/create-product.dto';
@@ -8,6 +8,8 @@ import { ResponseCodes } from '../common/response-codes.enum';
 import { UserRoles } from '../decorators/roles.decorators';
 import { UserType } from 'src/common/user-type.enum';
 import { CategoryService } from 'src/service/category.service';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('products')
 export class ProductController {
@@ -19,20 +21,35 @@ export class ProductController {
 
   @Post()
   @UserRoles(UserType.ADMIN)
-  async createProduct(@Body() createProductDto: CreateProductDto,@Res() res: Response,) {
-    this.logger.log(`Create product request initiated: ${createProductDto.name}`,);
+  @UseInterceptors(FilesInterceptor('images'))
+  @ApiBearerAuth('access-token')
+  async createProduct(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFiles() files: Express.Multer.File[],
+    @Res() res: Response,
+  ) {
     try {
+      this.logger.log(`Create product request initiated: ${createProductDto.name}`);
       const category = await this.categoryService.findCategoryById(createProductDto.categoryId);
-      if(!category){
-        this.logger.log(`Category with ${createProductDto.categoryId} not found`,);
-        return res.status(HttpStatus.NOT_FOUND).json(new ApiResponse(false,ResponseCodes.GENERIC_NOT_FOUND,'Category not found',null));
+      if (!category) {
+        this.logger.log(`Category with ID ${createProductDto.categoryId} not found.`);
+        return res.status(HttpStatus.NOT_FOUND).json(
+          new ApiResponse(false, ResponseCodes.GENERIC_NOT_FOUND, 'Category not found', null),
+        );
       }
-      const product = await this.productService.createProduct(createProductDto);
+      if (typeof createProductDto.tags === 'string') {
+        createProductDto.tags = JSON.parse(createProductDto.tags);
+      }
+      const product = await this.productService.createProduct(createProductDto, files);
       this.logger.log(`Product created successfully: ${createProductDto.name}`);
-      return res.status(HttpStatus.CREATED).json(new ApiResponse(true,ResponseCodes.GENERIC_ACCEPTED,'Product created successfully',product));
+      return res.status(HttpStatus.CREATED).json(
+        new ApiResponse(true, ResponseCodes.GENERIC_ACCEPTED, 'Product created successfully', product),
+      );
     } catch (error) {
-      this.logger.error(`Failed to create product: ${createProductDto.name} - ${error}`,);
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(new ApiResponse(false,ResponseCodes.GENERIC_INTERNAL_SERVER_ERROR,'Internal server error',null));
+      this.logger.error(`Failed to create product: ${createProductDto.name} - ${error.message}`);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(
+        new ApiResponse(false, ResponseCodes.GENERIC_INTERNAL_SERVER_ERROR, 'Internal server error', null),
+      );
     }
   }
 

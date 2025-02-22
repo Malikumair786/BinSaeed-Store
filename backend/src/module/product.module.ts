@@ -4,12 +4,11 @@ import { Product } from 'src/model/product.entity';
 import { ProductService } from 'src/service/product.service';
 import { ProductController } from 'src/controller/product.controller';
 import { CategoryModule } from './category.module';
-import { TagModule } from './tag.module';
-import { ImageModule } from './image.module';
 import { VariantModule } from './variant.module';
+import { S3Module } from './s3Module.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Product]), CategoryModule, TagModule, ImageModule, VariantModule],
+  imports: [TypeOrmModule.forFeature([Product]), CategoryModule, VariantModule, S3Module],
   providers: [ProductService],
   controllers: [ProductController],
   exports: [ProductService],

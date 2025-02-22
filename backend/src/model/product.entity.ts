@@ -10,8 +10,6 @@ import {
 } from 'typeorm';
 import { Category } from './category.entity';
 import { ProductVariant } from './product_Variants.entity';
-import { ProductImage } from './product_images.entity';
-import { ProductTag } from './product_tags.entity';
 
 @Entity('products')
 export class Product {
@@ -37,12 +35,12 @@ export class Product {
 
   @OneToMany(() => ProductVariant, (variant) => variant.product)
   variants: ProductVariant[];
+  
+  @Column("simple-array", {nullable: true})
+  images: string[];
 
-  @OneToMany(() => ProductImage, (image) => image.product)
-  images: ProductImage[];
-
-  @OneToMany(() => ProductTag, (tag) => tag.product)
-  tags: ProductTag[];
+  @Column("simple-array", {nullable: true})
+  tags: string[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
