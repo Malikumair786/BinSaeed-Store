@@ -57,6 +57,22 @@ export class ProductService {
     }
   }
 
+  async uploadImages(files: Express.Multer.File[]){
+    try {
+      let uploadedImageUrls: string[] = [];
+      if (files && files.length > 0) {
+        uploadedImageUrls = await Promise.all(
+          files.map((file) => this.s3Service.uploadFile(file)),
+        );
+      }
+      this.logger.log(`Images uploaded successfully`);
+      return uploadedImageUrls;
+    } catch (error) {
+      this.logger.error(`Failed to create product: ${error.message}`);
+      throw new InternalServerErrorException('Failed to create product');
+    }
+  }
+
   async updateProduct(id: number,updateProductDto: UpdateProductDto,): Promise<Product> {
     try {
       this.logger.log(`Updating product ID: ${id}`);
@@ -103,6 +119,7 @@ export class ProductService {
       const products = await this.productRepository
         .createQueryBuilder('product')
         .leftJoinAndSelect('product.variants', 'variants') // Join variants
+        .leftJoinAndSelect('product.category', 'category')
         .getMany();
       this.logger.log(`Successfully fetched ${products.length} products`);
       return products;

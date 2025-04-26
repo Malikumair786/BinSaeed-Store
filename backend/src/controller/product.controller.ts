@@ -53,6 +53,29 @@ export class ProductController {
     }
   }
 
+  @Post("/images")
+  @UserRoles(UserType.ADMIN)
+  @UseInterceptors(FilesInterceptor('images'))
+  @ApiBearerAuth('access-token')
+  async iuploadImages(
+    @UploadedFiles() files: Express.Multer.File[],
+    @Res() res: Response,
+  ) {
+    try {
+      this.logger.log(`Uploading Image to S3`);
+      const image = await this.productService.uploadImages(files);
+      this.logger.log(`image upload successfully: ${image}`);
+      return res.status(HttpStatus.CREATED).json(
+        new ApiResponse(true, ResponseCodes.GENERIC_ACCEPTED, 'image upload successfully', image),
+      );
+    } catch (error) {
+      this.logger.error(`Failed to upload image:  - ${error.message}`);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(
+        new ApiResponse(false, ResponseCodes.GENERIC_INTERNAL_SERVER_ERROR, 'Internal server error', null),
+      );
+    }
+  }
+
   @Get(':id')
   async getProduct(@Param('id') id: number, @Res() res: Response) {
     this.logger.log(`Get product request initiated: ${id}`,);
